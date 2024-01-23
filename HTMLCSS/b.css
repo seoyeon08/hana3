@@ -1,6 +1,9 @@
 body::before{
     content: 'BBB';
 }
+body{
+    margin-top: 5rem;
+}
 
 /* // Small devices (landscape phones, 576px and up) */
 @media (min-width: 576px) { body::before{content: 'CCC';}}
@@ -19,8 +22,8 @@ body::before{
 
 .box{
     background-color: lightblue;
-    border: 1px solid red;
+    border: 1px solid blue;
     min-height: 2rem;
     font-size: 2rem;
-
+    width: 100%;
 }
