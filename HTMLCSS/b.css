@@ -3,6 +3,8 @@ body::before{
 }
 body{
     margin-top: 5rem;
+    margin-left: 3rem;
+    margin-right: 3rem;
 }
 
 /* // Small devices (landscape phones, 576px and up) */
@@ -18,7 +20,7 @@ body{
 @media (min-width: 1200px) { body::before{content: 'FF';}}
 
 /* // XX-Large devices (larger desktops, 1400px and up) */
-@media (min-width: 1400px) { body::before{content: 'GGG';}}
+@media (min-width: 1400px) { body::before{content: 'Big';}}
 
 .box{
     background-color: lightblue;
