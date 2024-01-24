@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="./output.css" rel="stylesheet">
+</head>
+<body>
+    <h1 class="text-3xl font-bold bg-green-300 h-15 text-center py-2">
+        Table & Login 실습
+    </h1>
+    <!-- <button class="text-white px-4 sm:px-8 py-2 sm:py-3 m-5 bg-sky-700 hover:bg-sky-800">btn1</button>
+    <button class="bg-sky-700 px-4 py-2 text-white m-5 hover:bg-sky-800 sm:px-8 sm:py-3">btn2</button> -->
+    <div class="container mx-auto ml-5 justify-center flex">
+        <div class="w-1/2 p-4">
+            <br />
+            <!-- table1 -->
+            <table class="border-collapse border border-slate-500 px-10 py-2">
+                <caption class="caption-bottom">
+                    선물용과 가정용 상품구성
+                </caption>
+                <thead class="bg-blue-300">
+                <tr>
+                    <th class="border border-slate-600 px-4 py-2">용도</th>
+                    <th class="border border-slate-600 px-4">중량</th>
+                    <th class="border border-slate-600 px-7">개수</th>
+                    <th class="border border-slate-600 px-5">가격</th>
+                </tr>
+                </thead>
+                <tbody class=" text-justify-center text-center">
+                <tr>
+                    <td class="border border-slate-700" rowspan="2">선물용</td>
+                    <td class="border border-slate-700 ...">3KG</td>
+                    <td class="border border-slate-700 ...">11~16과</td>
+                    <td class="border border-slate-700 ...">35,000</td>
+                </tr>
+                <tr>
+                    <td class="border border-slate-700 ...">5KG</td>
+                    <td class="border border-slate-700 ...">18~26과</td>
+                    <td class="border border-slate-700 ...">52,000</td>
+    
+                </tr>
+                <tr>
+                    <td class="border border-slate-700 ..." rowspan="2">가정용</td>
+                    <td class="border border-slate-700 ...">3KG</td>
+                    <td class="border border-slate-700 ...">11~16과</td>
+                    <td class="border border-slate-700 ...">35,000</td>
+
+                </tr>
+                <tr>
+                    <td class="border border-slate-700 ...">5KG</td>
+                    <td class="border border-slate-700 ...">18~26과</td>
+                    <td class="border border-slate-700 ...">52,000</td>  
+                </tr>
+                </tbody>
+            </table>
+            <br/>
+            <br/>
+             <!-- table2 -->
+             <table class="border-collapse border border-slate-500 px-10 py-2">
+                <caption class="caption-bottom">
+                    선물용과 가정용 상품구성
+                </caption>
+                <thead class="bg-green-200">
+                <tr>
+                    <th class="border border-slate-600 px-4 py-2">용도</th>
+                    <th class="border border-slate-600 px-4">중량</th>
+                    <th class="border border-slate-600 px-7">개수</th>
+                    <th class="border border-slate-600 px-5">가격</th>
+                </tr>
+                </thead>
+                <tbody class="text-justify-center text-center">
+                <tr>
+                    <td class="border border-slate-700" rowspan="2">선물용</td>
+                    <td class="border border-slate-700 ...">3KG</td>
+                    <td class="border border-slate-700 ...">11~16과</td>
+                    <td class="border border-slate-700 ...">35,000</td>
+                </tr>
+                <tr>
+                    <td class="border border-slate-700 ...">5KG</td>
+                    <td class="border border-slate-700 ...">18~26과</td>
+                    <td class="border border-slate-700 ...">52,000</td>
+    
+                </tr>
+                <tr>
+                    <td class="border border-slate-700 ..." rowspan="2">가정용</td>
+                    <td class="border border-slate-700 ...">3KG</td>
+                    <td class="border border-slate-700 ...">11~16과</td>
+                    <td class="border border-slate-700 ...">35,000</td>
+
+                </tr>
+                <tr>
+                    <td class="border border-slate-700 ...">5KG</td>
+                    <td class="border border-slate-700 ...">18~26과</td>
+                    <td class="border border-slate-700 ...">52,000</td>  
+                </tr>
+                </tbody>
+            </table>
+
+
+        </div>
+        <div class="w-1/2 p-4">
+            <h1 class="text-2xl font-bold">Login</h1>
+            <br/>
+            
+            <form class="w-1/2">
+                <div class="mb-4">
+                  <label for="username" class="block text-gray-700 text-sm font-bold mb-2">ID</label>
+                  <input type="text" id="username" name="username" class="w-full border border-gray-300 p-2 rounded focus:outline-none focus:border-blue-500">
+                </div>
+          
+                <div class="mb-4">
+                  <label for="password" class="block text-gray-700 text-sm font-bold mb-2">Password</label>
+                  <input type="password" id="password" name="password" class="w-full border border-gray-300 p-2 rounded focus:outline-none focus:border-blue-500">
+                </div>
+          
+                <button type="submit" class="bg-blue-500 text-white p-2 rounded w-full hover:bg-blue-600 focus:outline-none focus:border-blue-700">
+                  로그인
+                </button>
+              </form>
+        </div>
+    </div>
+</body>
+</html>
