@@ -169,3 +169,9 @@ const a22_11 = myConcat(3, 33);
 console.log('a22_1:', a22_11);
 const a22_22 = myConcat([5, 55]);
 console.log('a22_2', a22_22)
+
+// sum 실습
+let sum = 0; 
+
+// reduce 실습
+ 
