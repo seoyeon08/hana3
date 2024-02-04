@@ -12,8 +12,40 @@ class Collection {
         this.#arr.push(value);
         return this;
     }
+    clear(){
 
-    size(){
+    }
+    toArray(){
+        return ;
+    }
+    remove(){
+
+    }
+    peek(){
+        return this.#arr.at( this.isStack() ? -1:0);    //부모 클래스
+        // return this._arr.at(0); 자식 클래스
+    }
+    
+    // iterator는 이제 다 generator로 만든다. 2번 문제는 이걸 추가하면 된다. 
+    // iterator과 generator 둘 다 사용 가능하다.
+    *[Symbol.iterator](){
+        for(let i = 0; i < this.ResizeObserver; i += 1){
+            yield this._arr[i];
+        }
+    };
+
+
+    pull(){
+
+    }
+    isStack(){
+        return this.constructor.name == 'Stack';
+    }
+    get isEmpty(){
+
+    }
+
+    get size(){
         return this.#arr?.length;
     }
 
@@ -23,7 +55,9 @@ class Collection {
     print(){
         return console.log(this.#arr);
     }
-
+    iterator(){
+        return this[Symbol.iterator]();
+    }
 }
 
 class Stack extends Collection{
@@ -51,3 +85,5 @@ const queue = new Queue();
 queue.enqueue(3).enqueue(5); // 추가하기
 console.log('last queue=', queue.dequeue()); // 추가한지 가장 오래된 - 먼저 들어간 - 하나 꺼내기
 queue.print();
+
+const itStack = stack.iterator();
