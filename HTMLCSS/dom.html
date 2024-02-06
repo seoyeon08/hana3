@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS-DOM</title>
+    <script src="./dom2.js" defer></script>
+    <style>
+        ul{
+
+        }
+        .bg-yellow{
+            background-color: yellow;
+        }
+        
+        th, td{
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <table id="tbl" border="1" style="margin-bottom: 20px;">
+        <thead>
+            <tr>
+                <th style="width: 50px;">ID</th>
+                <th style="width: 100px;">Name</th>
+                <th style="width: 80px;">...</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>Hong</td>
+                <td>Seoul</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>Kim</td>
+                <td>Seoul</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td colspan="2">Choi</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul class = 'bg-yellow'>
+        <li id="li1">aaa</li>
+        <li id="li2">bbb</li>
+        <li id="li3">ccc</li>
+    </ul>
+</body>
+</html>
+!
