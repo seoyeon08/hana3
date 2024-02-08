@@ -5,7 +5,7 @@ type User = {
     name: string;
 };
 
-const hong: User = {id: 1, name: 'Hong'};
+// const hong: User = {id: 1, name: 'Hong'};
 const kim: User = {id: 2, name: 'Kim'};
 
 const s: string = 'abc';
