@@ -1,7 +1,9 @@
-// import assert from 'assert';
+import assert from 'assert';
 const ㄱ = 'ㄱ'.charCodeAt(0);
 const ㅎ = 'ㅎ'.charCodeAt(0);
 const 가 = '가'.charCodeAt(0);
+const 나 = '나'.charCodeAt(0);
+
 
 const JAUM_ALPHA_NUMS = [108, 76, 109, 77, 110, 78, 114, 82, 48, 49, 51, 54, 55, 56,];
 // const x = [...'lLmMnNrR013678'].map( s => s.charCodeAt(0));
@@ -30,12 +32,12 @@ for(let i = 12593; i <= 12622; i += 1)
 // isEndJaum('점수 A');  // false   cf. isEndJaum('알파벳L')은 true
 // isEndJaum('24');     // false   cf. isEndJaum('23')은 true 136780
 
-asserts.strictEqual(isEndJaum('강원도'), false);
-asserts.strictEqual(isEndJaum('바라당'), true);
-asserts.strictEqual(isEndJaum('ㅜㅜ'), false);
-asserts.strictEqual(isEndJaum('케잌'), true);
-asserts.strictEqual(isEndJaum('점수 A'), false);
-asserts.strictEqual(isEndJaum('24'), false);
+assert.strictEqual(isEndJaum('강원도'), false);
+assert.strictEqual(isEndJaum('바라당'), true);
+assert.strictEqual(isEndJaum('ㅜㅜ'), false);
+assert.strictEqual(isEndJaum('케잌'), true);
+assert.strictEqual(isEndJaum('점수 A'), false);
+assert.strictEqual(isEndJaum('24'), false);
 
 const josa = (str, josaStr) => {
     const josas = josaStr.split('/');
@@ -43,3 +45,4 @@ const josa = (str, josaStr) => {
 }
 const iga = str => josa(str, '이/가');
 const eunun = str => josa(str, '은/는');
+

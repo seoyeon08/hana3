@@ -13,7 +13,7 @@ const SIZE: Size[] = [
     {id: 'M', price: 12000},
     {id: 'L', price: 14000},
     {id: 'XL', price: 15000},
-]
+] as const;
   
 const sizeOption: SizeOption  = {XS: 1, S: 5, M: 2, L: 2, XL: 4};
 
