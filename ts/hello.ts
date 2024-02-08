@@ -1,9 +1,9 @@
 console.log('Hello Typesctipt!');
 
-type User = {
-    id: number;
-    name: string;
-};
+// type User = {
+//     id: number;
+//     name: string;
+// };
 
 // const hong: User = {id: 1, name: 'Hong'};
 const kim: User = {id: 2, name: 'Kim'};
