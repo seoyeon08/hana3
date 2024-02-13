@@ -1,0 +1,1 @@
+// const promi = (s:string) => new Promise();
