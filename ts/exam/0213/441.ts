@@ -30,5 +30,5 @@ class Retriever implements Dog {
 
 function isDog(a: Animal): a is Dog {
 	// return a instanceof Retriever;  // 이렇게만 쓰면, 확장성이 좋지 않음. dog implements 하는 모든 클래스를 다 적어줘야 하기 때문
-    return 'name' in a;     // 이렇게 쓰삼
+    return 'name' in a && !('punch' in a);     // 이렇게 쓰삼
 }
