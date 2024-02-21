@@ -1,10 +1,11 @@
-import { Children, useState } from 'react';
+import { Children, useContext, useRef, useState } from 'react';
 import reactLogo from './assets/react.svg';
 import viteLogo from '/vite.svg';
 import './App.css';
-import { Hello } from './components/hello';
+// import { Hello } from './components/hello';
 import My from './components/my';
-import Sample from './components/Sample';
+import { flushSync } from 'react-dom';
+import { useCounter } from './contexts/counter-context';
 
 export type LoginUser = { id: number; name: string };
 export type Cart = { id: number; name: string; price: number };
@@ -45,6 +46,10 @@ function App() {
   const [count, setCount] = useState(0);
   const [session, setSession] = useState<Session>(SampleSession);
   const plusCount = () => setCount(count+1);
+  const titleRef = useRef<HTMLHeadingElement>(null);
+
+  
+
   // const childern = ;
   // const login = (id:number, name:string) => {
   //   setSession([...session, ])
@@ -86,16 +91,18 @@ function App() {
         logout={logout}
         removeItem={removeItem}
       />
-        <Hello name='Hong' age={25} plusCount={plusCount}>반갑습니다.</Hello>
+        {/* <Hello name='Hong' age={25} plusCount={plusCount}>반갑습니다.</Hello> */}
         
         <button onClick={()=> {
           for(let i = 0; i < 10; i += 1){
             console.log('i=', 1);
             setCount(prev => prev + 1); //클릭을 두 번 할수도 있으니까, 정확함을 위해 콜백 함수를 쓰는게 맞다.
+            flushSync(plusCount);
           }
         }}>
           count is {count}
         </button>
+        <button onClick={() => titleRef.current?.scrollIntoView({behavior: 'auto'})}></button>
         
       </div>
       
