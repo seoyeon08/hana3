@@ -5,7 +5,7 @@ import {
     useContext,
     useState,
   } from 'react';
-  import { ItemHandler } from '../components/my';
+  import { ItemHandler } from '../components/My';
 import { Cart, Session } from '../App';
 
 

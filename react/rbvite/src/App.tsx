@@ -1,4 +1,4 @@
-import { Ref, createRef, forwardRef, useRef } from 'react';
+import { Ref, createRef, forwardRef, useLayoutEffect, useRef, useState } from 'react';
 import './App.css';
 // import { Hello } from './components/hello';
 import My, { ItemHandler } from './components/My';
@@ -6,6 +6,7 @@ import { flushSync } from 'react-dom';
 import { useCounter } from './contexts/counter-context';
 // import Hello from './components/hello';
 import { SessionProvider } from './contexts/session-context';
+import Posts from './components/Posts';
 
 export type LoginUser = { id: number; name: string };
 export type Cart = { id: number; name: string; price: number };
@@ -51,6 +52,11 @@ const H5 = forwardRef(({ ss }: { ss: string }, ref: Ref<HTMLInputElement>) => {
   });
   H5.displayName = 'H5';
 
+type Position = {
+  x: number;
+  y: number;
+}
+
 function App() {
   // const [count, setCount] = useState(0);
   // const [session, setSession] = useState<Session>(SampleSession);
@@ -60,7 +66,20 @@ function App() {
   const childInputRef = createRef<HTMLInputElement>();
   const titleRef = useRef<HTMLHeadingElement>(null);
   const myHandlerRef = useRef<ItemHandler>(null);
-  
+
+  const [position, setPosition] = useState<Position>({x:0, y:0});
+
+const catchPosition = ({x, y}:Position) => {
+  setPosition({x, y});
+}
+
+  useLayoutEffect(() => {
+    window.addEventListener('mousemove', (e) => {
+      
+    });
+    return () => window.removeEventListener('mousemove', catchPosition);
+  });
+  <small>{JSON.stringify(position)}</small>
 
   // const childern = ;
   // const login = (id:number, name:string) => {
@@ -80,6 +99,8 @@ function App() {
   // }
   return (
     <>
+      <Posts />
+      
       <h1 ref={titleRef} style={{ color: 'white', backgroundColor: 'red' }}>
         Vite + React
       </h1>

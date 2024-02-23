@@ -1,9 +1,32 @@
-import { PropsWithChildren, createContext, useCallback, useContext, useState } from "react";
+import { PropsWithChildren, ReducerAction, createContext, useCallback, useContext, useState } from "react";
 
 type CounterContextProp = {
     count: number;
     plusCount: () => void;
     minusCount: () => void;
+}
+
+const reducer = (count:number, {type,payload = 1}:ReducerAction) => {
+    if(type === 'plus'){
+        return count + 1;
+    }
+    if (type === 'minus'){
+        return count - payload;
+    }
+    // return count;
+    // 이런 방법으로 구현할 수도 있다.
+    switch(type){
+        case 'plus': 
+            return count + 1;
+        case 'minus' :
+            return count - 1;
+    }
+};
+
+export const CounterProvider = ({children} : PropsWithChildren) => {
+    const [count, dispatch] = useReducer(reducer, 0);
+    const plusCount = () => dispatch({type:'plus'});
+    const minusCount = (payload)
 }
 
 const CounterContext = createContext<CounterContextProp>({
