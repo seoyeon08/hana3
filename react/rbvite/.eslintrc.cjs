@@ -31,6 +31,8 @@ module.exports = {
       quotes,
       ['error', 'single', { allowTemplateLiterals: true }],
     ],
+    'no-unused-vars': 'off',
+    '@typescript-eslint/no-unused-vars': 'off',
     'react/no-array-index-key': 'error',
   },
 };

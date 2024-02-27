@@ -2,19 +2,48 @@ import {
     ReactNode,
     RefObject,
     createContext,
+    useCallback,
     useContext,
+    useMemo,
+    useReducer,
     useState,
   } from 'react';
   import { ItemHandler } from '../components/My';
 import { Cart, Session } from '../App';
 
+const LOGIN = 'LOGIN';;
+const LOGOUT = 'LOGOUT';
+const SAVE_ITEM = 'SAVE_ITEM';
+const REMOVE_ITEM = 'REMOVE_ITEM';
+
+type SessionAction = 
+  | {type: typeof LOGIN; payload:{id:number, name:string}}
+  | {type: typeof LOGOUT}
+  | {type: typeof SAVE_ITEM; payload:{id:number, name:string, price:number}}
+  | {type: typeof REMOVE_ITEM; payload:{itemId:number}};
 
 type SessionContextProp = {
     session: Session;
+    dispatch: React.Dispatch<SessionAction>;
     login: (id: number, name: string) => void;
     logout: () => void;
     saveItem: ({ id, name, price }: Cart) => void;
     removeItem: (itemId: number) => void;
+    totalPrice: number;
+  };
+  
+  const SessionContext = createContext<SessionContextProp>({
+      session: { loginUser: null, cart: [] },
+      login: () => {},
+      logout: () => {},
+      saveItem: () => {},
+      removeItem: () => {},
+      totalPrice: 0,
+    });
+
+  type ProviderProps = {
+    children: ReactNode;
+    myHandlerRef?: RefObject<ItemHandler>;
   };
 
 const SampleSession: Session = {
@@ -27,79 +56,184 @@ cart: [
 ],
 };
 
-const SessionContext = createContext<SessionContextProp>({
-    session: { loginUser: null, cart: [] },
-    login: () => {},
-    logout: () => {},
-    saveItem: () => {},
-    removeItem: () => {},
-  });
 
 type ProviderProps = {
 children: ReactNode;
 myHandlerRef?: RefObject<ItemHandler>;
 };
 
-export const SessionProvider = ({ children, myHandlerRef }: ProviderProps) => {
-    const [session, setSession] = useState<Session>(SampleSession);
-    const login = (id: number, name: string) => {
-        const loginNoti = myHandlerRef?.current?.loginHandler.noti || alert;
-        console.log('🚀  loginNoti:', loginNoti);
-        const focusId = myHandlerRef?.current?.loginHandler.focusId;
-        const focusName = myHandlerRef?.current?.loginHandler.focusName;
+// function add<T extends number |string>(a:number|string, b:number|string):T extends string ?string:number{
+//   return a + b;
+// }
+type Action = {
+  type: 'login' | 'logout'; payload: LoginUser;
+} 
+| {type: 'set', payload:Session}
+| {type: 'saveItem'; payload:Cart}
+| {type: 'removeItem'; payload: number};
+
+const reducer = (session:Session, {type, payload}:Action) => {
+  switch (type){
+    case 'set' :
+      return {...(payload as Session)};
+    case 'login' :
+      return { ...session, loginUser:payload as LoginUser};
+    case 'logout' :
+      return { ...session, loginUser:payload};
+    case 'saveItem' : // 핵심
+      const {id, name, price} = payload;
+      const { cart} = session;
+      const foundItem = id !== 0 && cart.find((item) => item.id === id);
+      if(!foundItem){
+        const maxId = Math.max(...session.cart.map((item) => item.id), 0)+1;
+        return { ...session, cart: [...cart, { id: maxId + 1, name, price }] };
+      }
+      else{
+        foundItem.name = name;
+        foundItem.price = price;
+      }
+      return { ...session};
     
-        if (!id || isNaN(id)) {
-            loginNoti('User ID를 입력하세요!');
-            if (focusId) focusId();
-            return;
-          }
+    default :
+      return session;
+  }
+};
+
+// 타입 서술어
+function isCartType(data: Cart |number):data is Cart {
+  return typeof data !==  'number';
+}
+
+// type Action = {
+//   type: 'set' | 'login' | 'logout' | 'saveItem' | 'removeItem' ;
+//   payload: Session | LoginUser |Cart |number;
+// }
+
+// const reducer = (state, action)_ => {};
+
+export const SessionProvider = ({ children, myHandlerRef }: ProviderProps) => {
+    // const [session, setSession] = useState<Session>(SampleSession);
+    // const login = (id: number, name: string) => {
+    //     const loginNoti = myHandlerRef?.current?.loginHandler.noti || alert;
+    //     console.log('🚀  loginNoti:', loginNoti);
+    //     const focusId = myHandlerRef?.current?.loginHandler.focusId;
+    //     const focusName = myHandlerRef?.current?.loginHandler.focusName;
+    const [session, dispatch] = useReducer(reducer, {
+      loginUser: null,
+      cart: [],
+    });
+
+    const totalPrice = useMemo(
+      () => session.cart.reduce((sum, item) => sum + item.price, 0),
+      [session.cart]
+    );
+    const login = useCallback((id: number, name: string) => {
+      const loginNoti = myHandlerRef?.current?.loginHandler.noti || alert;
+      console.log('🚀  loginNoti:', loginNoti);
+  
+      const focusId = myHandlerRef?.current?.loginHandler.focusId;
+      const focusName = myHandlerRef?.current?.loginHandler.focusName;
+      if (!id || isNaN(id)) {
+        loginNoti('User ID를 입력하세요!');
+        if (focusId) focusId();
+        return;
+      }
+      if (!name) {
+        loginNoti('User name을 입력하세요!');
+        if (focusName) focusName();
+        return;
+      }
+
+      // setSession((session) => ({ ...session, loginUser: { id, name } }));
+      dispatch({ type: 'login', payload: { id, name } });
+    }, []);
+
+    const logout = useCallback(() => {
+       // setSession((session) => ({ ...session, loginUser: null }));
+      dispatch({ type: 'logout', payload: null });
+    }, []);
+
+};
+      // if (!id || isNaN(id)) {
+      //       loginNoti('User ID를 입력하세요!');
+      //       if (focusId) focusId();
+      //       return;
+      //     }
       
-          if (!name) {
-            loginNoti('User name을 입력하세요!');
-            if (focusName) focusName();
-            return;
-          }
+      //     if (!name) {
+      //       loginNoti('User name을 입력하세요!');
+      //       if (focusName) focusName();
+      //       return;
+      //     }
       
-          setSession({ ...session, loginUser: { id, name } });
-        };
-        const logout = () => {
-          // setSession({ cart: [...session.cart], loginUser: null });
-          // session.loginUser = null;
-          setSession({ ...session, loginUser: null });
-        };
+        //   setSession({ ...session, loginUser: { id, name } });
+        // };
+        // const logout = () => {
+        //   // setSession({ cart: [...session.cart], loginUser: null });
+        //   // session.loginUser = null;
+        //   setSession({ ...session, loginUser: null });
+        // };
         // add(id=0) or modify(id!=0) item
         const saveItem = ({ id, name, price }: Cart) => {
-          const { cart } = session;
-          const foundItem = id !== 0 && cart.find((item: { id: number; }) => item.id === id);
-          if (!foundItem) {
-            id = Math.max(...session.cart.map((item: { id: any; }) => item.id), 0) + 1;
-            cart.push({ id, name, price });
-          } else {
-            foundItem.name = name;
-            foundItem.price = price;
-          }
-          setSession({
-            ...session,
+          // const { cart } = session;
+          // const foundItem = id !== 0 && cart.find((item: { id: number; }) => item.id === id);
+          // if (!foundItem) {
+          //   id = Math.max(...session.cart.map((item: { id: any; }) => item.id), 0) + 1;
+          //   cart.push({ id, name, price });
+          // } else {
+          //   foundItem.name = name;
+          //   foundItem.price = price;
+          // }
+          // setSession({
+            // ...session,
             // cart,
             // cart: [...cart],
-          });
-        };
-        const removeItem = (itemId: number) => {
+          // });
+          dispatch({ type: 'saveItem', payload: { id, name, price } });
+        }, []);
+
+        const removeItem = useCallback((itemId: number) => {
           console.log('🚀  itemId:', itemId);
-          setSession({
-            ...session,
+          // setSession({
+            // ...session,
             // cart: [...session.cart.filter((item) => item.id !== itemId)],
-            cart: session.cart.filter((item: { id: number; }) => item.id !== itemId),
-          });
+            // cart: session.cart.filter((item: { id: number; }) => item.id !== itemId),
+            dispatch({ type: 'removeItem', payload: itemId });
+        },[]);
           // Virtual-DOM의 rerender() 호출 안함(: session의 주소는 안변했으니까!)
           // session.cart = session.cart.filter((item) => item.id !== itemId);
-        };
+        
+
+        useEffect(() => {
+          const controller = new AbortController();
+          const { signal } = controller;
+          (async function () {
+            const res = await fetch('/data/sample.json', {
+              signal,
+            });
+            const data = (await res.json()) as Session;
+            setSession(data);
+            // setSession(data);
+            dispatch({ type: 'set', payload: data });
+          })();
+          
+          return () => {
+            controller.abort();
+          };
+        }, []);
+        // return (
+        //   <SessionContext.Provider
+        //     value={{ session, login, logout, saveItem, removeItem }}
+        //   >
+        //     {children}
+        //   </SessionContext.Provider>
+        // );
+
         return (
           <SessionContext.Provider
-            value={{ session, login, logout, saveItem, removeItem }}
+            value={{ session, login, logout, saveItem, removeItem, totalPrice }}
           >
             {children}
           </SessionContext.Provider>
-        );
-      };
+        );      
       export const useSession = () => useContext(SessionContext);
