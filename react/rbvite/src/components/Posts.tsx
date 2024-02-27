@@ -1,63 +1,47 @@
-import { useEffect, useState } from 'react';
 import { useSession } from '../contexts/session-context';
-import { FaAngleDown, FaAngleUp } from 'react-icons/fa6';
 import { Login } from './Login';
-import { useToggle } from '../hooks/toggle';
-
-type PostType = {
-  userId: number;
-  id: number;
-  title: string;
-  body: string;
-  isOpen: boolean;
-};
-
+import { useFetch } from '../hooks/fetch';
+import { useLocation, useParams, useSearchParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import Post, { PostType } from './Post';
 const BASE_URL = 'https://jsonplaceholder.typicode.com';
-
-const Post = ({post} : {post: PostType}) => {
-    const[isOpen, toggleOpen] = useToggle();
-
-}
-
 export default function Posts() {
   const {
     session: { loginUser },
   } = useSession();
+  const {
+    data: posts,
+    isLoading,
+    error,
+  } = useFetch<PostType[]>({
+    url: `${BASE_URL}/posts?userId=${loginUser?.id}`,
+    dependencies: [loginUser],
+    defaultData: [],
+  });
+  const { id } = useParams(); // Item.tsx
+  console.log('🚀  id:', id);
+  const location = useLocation();
+  console.log('🚀  location:', location);
+  // const state = location.state as { x: number };
+  // const [searchParams, setSearchParams] = useSearchParams({ q: '' });
+  const [searchParams] = useSearchParams({ q: '' });
 
-  const [posts, setPosts] = useState<PostType[]>([]);
-  const [isLoading, setLoading] = useState(false);
-  const [isreloading, toggleReloading] = useToggle();
-
-  const toggleOpen = (postId:number) => {
-    const post = posts.find(({id}) => id === postId)!;
-    post.isOpen = !post.isOpen;
-    // setPosts([...posts]);    // 정석
-    toggleReloading();          // 변형
-  }
-
+  const q = searchParams.get('q');
+  const r = searchParams.get('r');
+  console.log('🚀  q, r:', q, r);
+  // useTimeout(() => setSearchParams({ q: 'qqq' }), 1000);
+  // useTimeout(() => setSearchParams({ q: 'qqq' }), 1000);
+  const [searchStr, setSearchStr] = useState('');
   useEffect(() => {
-    if (!loginUser) return;
-
-    const controller = new AbortController();
-    const { signal } = controller;
-    (async function () {
-      setLoading(true);
-      const res = await fetch(`${BASE_URL}/posts?userId=${loginUser?.id}`, {
-        signal,
-      });
-      const data = (await res.json()) as PostType[];
-      setPosts(data);
-      setLoading(false);
-    })();
-
-    return () => controller.abort();
-  }, [loginUser]);
-
+    setSearchStr(q || '');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <div className='active'>
-      {/* <h3>#{loginUser.id}'s Posts</h3> */}
+      <h1>{searchStr}</h1>
       {isLoading && <h1>Fetching Posts...</h1>}
-      <h1>isLoading: {isLoading ? 'TTT' : 'FFF'}</h1>
+      {error && <h3 style={{ color: 'red' }}>Error: {error}</h3>}
+      <h3>#user{loginUser?.id}`s Posts</h3>
       <ul className='un-list'>
         {!loginUser && (
           <>
@@ -65,20 +49,32 @@ export default function Posts() {
             <Login />
           </>
         )}
-        <h1>
-          #{loginUser?.id}의 게시글 수: {posts.length}
-        </h1>
-        {posts.map((post) => (
-          <li>
-            {post.title}
-            <button onClick={() => toggleOpen}>
-              {post.isOpen ? <FaAngleUp /> : <FaAngleDown />}
-            </button>
-            {post.isOpen && <div>{post.body}</div>}
-          </li>
-        ))}
-
+        {posts?.map((post:PostType) => <Post key={post.id} postData={post} />)}
       </ul>
     </div>
   );
 }
+// Best!!
+// const Post = ({ post }: { post: PostType }) => {
+//   const [isOpen, toggleOpen] = useToggle();
+//   return (
+//     <li
+//       className={clsx({
+//         border: isOpen,
+//         'border-green-500': isOpen,
+//         'mx-3': isOpen,
+//       })}
+//     >
+//       <strong className={clsx(isOpen && 'text-green-500 underline', 'italic')}>
+//         {post.title}
+//       </strong>
+//       <button
+//         onClick={() => toggleOpen()}
+//         className='rounded ml-3 text-blue-700'
+//       >
+//         {isOpen ? <FaAngleUp /> : <FaAngleDown />}
+//       </button>
+//       {isOpen && <div className='text-sm text-gray-500'>{post.body}</div>}
+//     </li>
+//   );
+// };
