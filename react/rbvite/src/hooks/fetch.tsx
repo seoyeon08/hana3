@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-
 type FetchParam<T> = {
   url: string | URL | globalThis.Request;
   options?: RequestInit;
@@ -8,16 +7,18 @@ type FetchParam<T> = {
   enable?: boolean;
 };
 
-export const useFetch = <T>({
+
+
+export function useFetch<T>({
   url,
   options = {},
   dependencies = [],
   defaultData,
   enable = true,
-}: FetchParam<T>) => {
+}: FetchParam<T>) {
   const [isLoading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [data, setData] = useState<T>(defaultData);
+  const [data, setData] = useState<T | undefined>(defaultData);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -35,7 +36,7 @@ export const useFetch = <T>({
           setError(res.status.toString());
           return;
         }
-        const data = (await res.json());
+        const data = (await res.json()) as T;
 
         setData(data);
       } catch (err) {

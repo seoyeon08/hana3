@@ -13,9 +13,12 @@ import Sample from './components/Sample';
 import DeferTrans from './components/DeferTrans';
 import { PostLayout } from './components/PostLayout';
 import { PostDetail } from './components/PostDetail';
-import ItemLayout from './components/ItemLayout';
-import { Item } from './components/Item';
-import { Items } from './components/Items';
+import ItemLayout from './components/items_v1/ItemLayout';
+import { Item } from './components/items_v1/Item';
+import { Items } from './components/items_v1/Items';
+import { ItemLayoutV2 } from './components/items_v2/ItemV2';
+import { ItemsV2 } from './components/items_v2/ItemV2';
+import { ItemV2 } from './components/items_v2/ItemV2';
 // import DeferTrans from './components/DeferTrans';
 // import Effect from './components/Effect';
 
@@ -45,6 +48,11 @@ function App() {
             <Route path=':id' element={<Item />}/>
           </Route>
 
+          <Route path='/v2/items' element={<ItemLayoutV2/>}>
+            <Route index element={<ItemsV2 />}/>
+            <Route path=':id' element={<ItemV2 />}/>
+          </Route>
+
 
           {/* <Route path='/items' element={<Items />} />
         <Route path='/items/:id' element={<Item />} /> */}
@@ -59,13 +67,13 @@ function App() {
         Vite + React
       </h1> */}
       {/* <DeferTrans /> */}
-      {/* <button onClick={() => myHandlerRef.current?.signOut()}>
+      <button onClick={() => myHandlerRef.current?.signOut()}>
         App-Sign-Out
       </button>
       <button onClick={() => myHandlerRef.current?.notify('테스트메시지')}>
         Message
       </button>
-      <button onClick={() => myHandlerRef.current?.removeItem()}>Rm2</button> */}
+      <button onClick={() => myHandlerRef.current?.removeItem()}>Rm2</button>
     </>
   );
 }

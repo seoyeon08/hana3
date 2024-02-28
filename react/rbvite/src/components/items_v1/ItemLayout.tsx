@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
-import { useSession } from "../contexts/session-context";
+import { useSession } from "../../contexts/session-context";
 
 
 const ItemLayout:React.FC = () => {

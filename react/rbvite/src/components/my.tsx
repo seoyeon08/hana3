@@ -1,4 +1,4 @@
-import { Cart } from "../App";
+// import { Cart } from "../App";
 import {Login, LoginHandler} from './Login';
 import { Profile } from "./profile";
 import { ForwardedRef, createRef, forwardRef, useImperativeHandle, useRef, useState } from 'react';
@@ -12,7 +12,7 @@ export type ItemHandler = {
     loginHandler: Partial<LoginHandler>;
   };
 
-export const My = forwardRef((_, ref: ForwardedRef<ItemHandler>) => {
+const My = forwardRef((_, ref: ForwardedRef<ItemHandler>) => {
     // const itemIdRef = useRef(0);
     const [currId, setCurrId] = useState(0);
     const [message, setMessage] = useState('');

@@ -21,7 +21,7 @@ module.exports = {
     'react-hooks/exhaustive-deps': 'warn',
     'react/prop-types': 'off',
     'react/no-array-index-key': 'error',
-
+    'prettier/prettier': 'error',
 
     'react-refresh/only-export-components': [
       'warn',
@@ -32,7 +32,7 @@ module.exports = {
       ['error', 'single', { allowTemplateLiterals: true }],
     ],
     'no-unused-vars': 'off',
-    '@typescript-eslint/no-unused-vars': 'off',
+    '@typescript-eslint/no-unused-vars': 'warn',
     'react/no-array-index-key': 'error',
   },
 };

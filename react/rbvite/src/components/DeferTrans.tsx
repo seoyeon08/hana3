@@ -1,54 +1,84 @@
-import { ChangeEvent, useEffect, useState } from "react"
+import {
+    ChangeEvent,
+    useDeferredValue,
+    useEffect,
+    useState,
+    useTransition,
+} from 'react';
+import { useTimeout } from '../hooks/timeout';
 
 type List = {
-    id: number;
-    value: String;
-}
+id: number;
+value: string;
+};
 
-function useDebounce(value:any, delay:number):any {
-    const [debounceValue, setDebounceValue] = useState(value);
+const useDebounce = (
+cb: () => void,
+delay: number,
+dependencies: unknown[] = []
+) => {
+useEffect(() => {
+    const timer = setTimeout(cb, delay);
 
-    useEffect(() => {
-        const handler = setTimeout(() => {
-            setDebounceValue(value);
-        }, delay);
+    return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+}, dependencies);
+};
 
-        return () => {clearTimeout(handler);
-        };
-    }, [value, delay]);
+export default function DeferTrans() {
+const [searchStr, setSearchStr] = useState('');
+// const deferredSearchStr = useDeferredValue(searchStr);
+const [list, setList] = useState<List[]>([]);
+const [debounceStr, setDebounceStr] = useState('');
 
-    return debounceValue;
-}
+const [isPending, startTransition] = useTransition();
 
-export default function DeferTranse() {
-    
-    const [searchStr, setSearchStr] = useState('');
-    const [list, setList] = useState([]);
-    const [transition, setTransition] = useState(0);
-    //다른애들을 지연시키지 않기 위해 나를 젤 마지막에 그린다.
-    // useEffect를 썼으면 4번 걸릴텐데 useTransition하면 한 번만 하면 된다????
-    
-    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const {value} = e.currentTarget;
-        setSearchStr(value);
-        const list = [];
-        for (let i = 0; i < 1000; i++) list.push({id:i + 1, value});
-        setList(list);
+const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.currentTarget;
+    setSearchStr(value);
+    startTransition(() => {
+    const lst = [];
+    for (let i = 0; i < 10000; i++) lst.push({ id: i + 1, value });
+    // lst.push({ id: i + 1, value: deferredSearchStr });
+    setList(lst);
+    });
+};
 
-        useEffect(() => {
-            const timer = setTimeout(() => {
-                setDebounce(searchStr);
+useTimeout(
+    // useDebounce(
+    () => {
+    console.log('******>>>', searchStr);
+    setDebounceStr(searchStr);
+    },
+    500,
+    [searchStr]
+);
 
-            }, 500,[searchStr]);
-        })
-    }
-    
-    return <>
+// useEffect(() => {
+//   const timer = setTimeout(() => {
+//     console.log('******>>>', searchStr);
+//     setDebounceStr(searchStr);
+//   }, 500);
 
-        <input type="text" onChange={handleChange} />
-        <h2>{searchStr}</h2>
-        <ul>
-        {list.map(item => <li key={item.key}>{item.value}</li>)}
-        </ul>
+//   return () => clearTimeout(timer);
+// }, [searchStr]);
+
+return (
+    <>
+    <input
+        type='text'
+        onChange={handleChange}
+        className='border border-red-500 rounded-lg'
+    />
+    <h2 className=' text-blue-500'>{searchStr}</h2>
+    <h2 className=' text-green-500'>{debounceStr}</h2>
+    {/* <h2 className=' text-red-500'>{deferredSearchStr}</h2> */}
+    {isPending && <h1 className='text-lg'>Loading...</h1>}
+    <ul>
+        {list.map((item) => (
+        <li key={item.id}>{item.value}</li>
+        ))}
+    </ul>
     </>
+);
 }

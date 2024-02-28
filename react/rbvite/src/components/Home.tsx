@@ -1,6 +1,6 @@
 import { createRef } from 'react';
 import { useCounter } from '../contexts/counter-context';
-import { H5 } from './h5';
+import { H5 } from './H5';
 // import MouseCapture from './MouseCapture';
 import { flushSync } from 'react-dom';
 

@@ -1,6 +1,6 @@
 import { useEffect, useReducer, useRef, useState } from "react";
 import { Form, useOutletContext, useSearchParams } from "react-router-dom";
-import { useSession } from "../contexts/session-context";
+import { useSession } from "../../contexts/session-context";
 
 type Prop = {
     item: Cart;
@@ -9,25 +9,38 @@ type Prop = {
 
 function ItemRead({item, toggleEditing}: Prop) {
     return (
-    <div className="text-right">
-        <div>
+    <div className="text-right p-5">
+        <div className='border-b border-gray-300'>
             <span className="float-start">상품명:</span>
             {item.name}
         </div>
-        <div>
+        <div className='border-b border-gray-300'>
             <span className="float-start">금액:</span>
             {item.price.toLocaleString()}원
         </div>
-        <div>
-            <button onClick={}>수정</button>
+        <div className='pt-5 pr-3'>
+            <button onClick={toggleEditing}>수정</button>
         </div>
     </div>
 )};
 
 const ItemUpdte = ({item, toggleEditing}:Prop) => {
     const {saveItem} = useSession();
+    const [isDirty, setDirty] = useState(false);
     const itemNameRef = useRef<HTMLInputElement>(null);
     const itemPriceRef = useRef<HTMLInputElement>(null);
+
+    const checkDirty = () => {
+        // const inpName: Field = e.currentTarget.name as Field;
+        // const inpRef = e.currentTarget.name === 'name' ? itemNameRef : itemPriceRef;
+        // setDirty(inpRef.current?.value !== item[inpName]);
+
+        // cf
+        setDirty(
+            itemNameRef.current?.value !== item.name ||
+            Number(itemPriceRef.current?.value) !== item.price
+        );
+    };
 
     const saveCartItem = (e: React.FormEvent) => {
         e.preventDefault();
@@ -55,34 +68,42 @@ const ItemUpdte = ({item, toggleEditing}:Prop) => {
     return(
         <form onSubmit={saveCartItem} onReset={toggleEditing} className="p-5">
             <input type="text"
+            name="name"
             ref={itemNameRef}
             placeholder="상품명..."
             className="border-2 border-sky-300 rounded-md"
+            onChange={checkDirty}
             />
             <input type="number"
             ref={itemPriceRef}
             placeholder="금액..."
             className="border-2 border-sky-300 rounded-md mt-2"
+            onChange={checkDirty}
             />
-            <div className="p-5">
-                <button type="reset" className="mx-5">
-                    취소
-                </button>
-                <button type="submit" className="btn-primary">
-                    수정
-                </button>
-            </div>
+            {isDirty && (
+                <div className="p-5">
+                    <button type="reset" className="mx-5">
+                        취소
+                    </button>
+                    <button type="submit" className="btn-primary">
+                        수정
+                    </button>
+                </div>
+            )}
         </form>
     );
 };
 
 export const Item = () => {
-    const {item} = useOutletContext<{item:Cart}>();
-    const {isEditing, toggleEditing} = useReducer((pre) => !pre, false);
+    const [item, setItem] = useState<Cart>({ id: 0, name: '', price: 0 });
+    const {item: itemData} = useOutletContext<{item:Cart}>();
+
+
+    const [isEditing, toggleEditing] = useReducer((pre) => !pre, false);
     return (
         <>
-            {isEdting ? <form></form>}
+            {isEditing ? (<ItemUpdte item={item} toggleEditing={toggleEditing}/>):(<ItemRead item={item} toggleEditing={toggleEditing}/>)};
             {item.name};
         </>
-    )
+    );
 };
