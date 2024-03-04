@@ -9,6 +9,7 @@ export const Item = () => {
         session: { cart },
     } = useSession();
     const [item, setItem] = useState<Cart>({ id: 0, name: '', price: 0 });
+
     const { item: contextItem } = useOutletContext<{ item: Cart }>();
     const navigate = useNavigate();
     const { id } = useParams();
@@ -35,10 +36,19 @@ export const Item = () => {
         ) : (
             <>
             <h1 className='text-lg'>상품 정보</h1>
-            {item.name} ({item.price.toLocaleString()}원)
-            <Button type='primary'>
-                <FaEdit /> Edit
-            </Button>
+            <div>
+                {item.name} ({item.price.toLocaleString()}원)
+                <Button
+                onClick={() =>
+                    navigate(`/v2/items/${item.id}/edit?itemId=${item.id}`)
+                }
+                variant='default'
+                className='ml-5'
+                title='수정하기'
+                >
+                <FaEdit />
+                </Button>
+            </div>
             </>
         )}
 

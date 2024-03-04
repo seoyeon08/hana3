@@ -1,22 +1,29 @@
 import clsx from 'clsx';
-import { PropsWithChildren } from 'react';
+import { ButtonHTMLAttributes, PropsWithChildren } from 'react';
 
-type Props = {
-    type: 'primary' | 'danger' | 'default';
-    onClick?: () => void;
-    };
+interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
+    variant: 'primary' | 'danger' | 'default' | 'success';
+    }
 
-    export const Button = ({
-    type = 'default',
+export const Button = ({
+    variant = 'default',
     children,
-    onClick = () => {},
-    }: PropsWithChildren<Props>) => {
+    className,
+    ...props
+}: PropsWithChildren<Props>) => {
     return (
         <button
-        onClick={onClick}
-        className={clsx(`btn-${type}`, 'inline-blockx', 'align-middlex')}
+        className={clsx(
+            `btn-${variant}`,
+            'inline-flex',
+            'justify-center',
+            'gap-1',
+            'items-center',
+            className
+        )}
+        {...props}
         >
-        <span className='inline-block align-middle'>{children}</span>
+        {children}
         </button>
     );
 };

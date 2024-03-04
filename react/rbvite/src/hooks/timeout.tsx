@@ -17,7 +17,7 @@ export const useTimeout = (
         };
         const clear = () => {
             clearTimeout(timeoutId);
-          };
+        };
         
     useEffect(() => {
         // const tmout = setTimeout(cb, delay);
@@ -36,4 +36,4 @@ export const useTimeout = (
 
 //after
 // const {reset, clear} = useTimeout(() => console.log('X'), 1000);
-useTimeout(() => console.log(`Hello, ${name}!!!`), 1000, ['Hong']);
+// useTimeout((name) => console.log(`Hello, ${name}!!!`), 1000, ['Hong']);

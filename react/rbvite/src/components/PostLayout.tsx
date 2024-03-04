@@ -7,7 +7,7 @@ import { useFetch } from '../hooks/fetch';
 const BASE_URL = 'https://jsonplaceholder.typicode.com';
 
 export const PostLayout = () => {
-    const {
+    const {login, 
         session: { loginUser },
     } = useSession();
 
